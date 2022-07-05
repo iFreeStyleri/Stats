@@ -23,5 +23,6 @@ namespace Stats.ViewModels
         {
             CovidStatsViewModel = covidStatsViewModel;
         }
+        public MenuWindowViewModel(){ }
     }
 }

@@ -12,12 +12,10 @@
 
 	<ItemGroup>
 	  <None Remove="Views\Assets\excel_icon.png" />
-	  <None Remove="Views\excel_icon.png" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <Resource Include="Views\Assets\excel_icon.png" />
-	  <Resource Include="Views\excel_icon.png" />
 	</ItemGroup>
 
 	<ItemGroup>

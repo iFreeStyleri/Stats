@@ -74,12 +74,16 @@ namespace Stats.ViewModels
 
             AddCovidSeriesCommand = new AsyncRelayCommand<CountryInfo>(country =>
             {
-                SelectedCountries.Add(country);
-                CovidPlotModel = new PlotModel()
-                .CovidPlotConfigure()
-                .AddSeriesCovidPlot(SelectedCountries, _covidDataService);
-                CovidPiePlotModel = new PlotModel()
-                .AddPieSeriesCovidPlot(SelectedCountries);
+                var result = SelectedCountries.FirstOrDefault(f => f.Equals(country));
+                if(result == null)
+                {
+                    SelectedCountries.Add(country);
+                    CovidPlotModel = new PlotModel()
+                    .CovidPlotConfigure()
+                    .AddSeriesCovidPlot(SelectedCountries, _covidDataService);
+                    CovidPiePlotModel = new PlotModel()
+                    .AddPieSeriesCovidPlot(SelectedCountries);
+                }
             });
 
             RemoveCovidSeriesCommand = new AsyncRelayCommand<CountryInfo>(country =>
@@ -93,6 +97,8 @@ namespace Stats.ViewModels
 
             ExportSelectedData = new AsyncRelayCommand<object>(obj =>
             {
+                if (!SelectedCountries.Any())
+                    return;
                 IsExport = false;
                 var fileDialog = new SaveFileDialog();
                 fileDialog.Filter = ".xlsx | *.xlsx";

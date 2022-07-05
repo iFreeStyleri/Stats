@@ -29,7 +29,6 @@ namespace Stats.Infrastructure.Extensions
         }
         public static PlotModel AddSeriesCovidPlot(this PlotModel model, IEnumerable<CountryInfo> countries, ICovidDataService covidDataService)
         {
-            countries = countries.Distinct();
             foreach(var country in countries)
             {
                 var title = country.Name + " " + country.Province;
