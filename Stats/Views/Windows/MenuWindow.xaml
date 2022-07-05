@@ -1,0 +1,22 @@
+﻿<Window x:Class="Stats.Views.Windows.MenuWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:Stats.ViewModels" xmlns:views="clr-namespace:Stats.Views"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance vm:MenuWindowViewModel, IsDesignTimeCreatable=True}"
+        Title="Stats" Height="450" Width="800">
+    <DockPanel>
+        <Menu Height="25" DockPanel.Dock="Top">
+            <MenuItem FontSize="14" Height="25" Header="File">
+                <MenuItem Header="Exit" Command="{Binding CloseApplicationCommand}"/>
+            </MenuItem>
+        </Menu>
+        <TabControl>
+            <TabItem Header="COVID-19">
+                <views:CovidStatsView DataContext="{Binding CovidStatsViewModel}"/>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
+</Window>

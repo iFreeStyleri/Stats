@@ -1,0 +1,78 @@
+﻿<UserControl x:Class="Stats.Views.CovidStatsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Stats.Views"
+             xmlns:c="clr-namespace:Stats.Models"
+             mc:Ignorable="d" 
+             xmlns:vm="clr-namespace:Stats.ViewModels"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:oxy="http://oxyplot.org/wpf"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             d:DataContext="{d:DesignInstance vm:CovidStatsViewModel, IsDesignTimeCreatable=True}"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <DockPanel>
+        <Grid Width="200">
+            <ListBox x:Name="countryListBox" SelectedItem="{Binding SelectedCountry}" ItemsSource="{Binding Countries}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <i:InvokeCommandAction Command="{Binding SelectCountryCommand}" CommandParameter="{Binding SelectedCountry}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <ListBox.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Add" Command="{Binding AddCovidSeriesCommand}" CommandParameter="{Binding SelectedCountry}"/>
+                        <MenuItem Header="Remove" Command="{Binding RemoveCovidSeriesCommand}" CommandParameter="{Binding SelectedCountry}"/>
+                    </ContextMenu>
+                </ListBox.ContextMenu>
+                <ListBox.ItemTemplate>
+                    <DataTemplate DataType="{x:Type c:CountryInfo}">
+                        <Grid>
+                            <StackPanel>
+                                <TextBlock Text="{Binding Name}" FontSize="16"/>
+                                <TextBlock Text="{Binding Province}"/>
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="301*"/>
+                <ColumnDefinition Width="299*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="113*"/>
+                <RowDefinition Height="112*"/>
+            </Grid.RowDefinitions>
+            <oxy:PlotView Margin="50,5,5,5" Model="{Binding CovidPlotModel}" Grid.RowSpan="1" Grid.ColumnSpan="2"/>
+            <Button IsEnabled="{Binding IsExport}" Name="button" Margin="5" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.Column="0" Width="40" Height="40">
+                <Image Source="/Views/excel_icon.png" Margin="2" RenderOptions.BitmapScalingMode="HighQuality"/>
+                <Button.ContextMenu>
+                    <ContextMenu x:Name="contextMenu">
+                        <MenuItem Header="Selected export..." Command="{Binding ExportSelectedData}"/>
+                        <MenuItem Header="All export..." Command="{Binding ExportAllData}"/>
+                    </ContextMenu>
+                </Button.ContextMenu>
+                <Button.Triggers>
+                    <EventTrigger SourceName="button" RoutedEvent="Button.Click">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="contextMenu" Storyboard.TargetProperty="(ContextMenu.IsOpen)">
+                                    <DiscreteObjectKeyFrame KeyTime="0:0:0">
+                                        <DiscreteObjectKeyFrame.Value>
+                                            <sys:Boolean>True</sys:Boolean>
+                                        </DiscreteObjectKeyFrame.Value>
+                                    </DiscreteObjectKeyFrame>
+                                </ObjectAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Button.Triggers>
+            </Button>
+            <oxy:PlotView Margin="5" Model="{Binding CovidPiePlotModel}" Grid.Row="1"/>
+        </Grid>
+    </DockPanel>
+</UserControl>
